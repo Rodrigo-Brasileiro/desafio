@@ -11,12 +11,20 @@
             "Horario_de_Saida": "2025-01-16 17:09:22"
         },
         {
-            "id": 3,
-            "Horario_de_Entrada": "2025-01-16 17:47:53",
+            "id": 2,
+            "Horario_de_Entrada": "2025-01-17 10:04:03",
             "Placa": "FAA-1234",
             "Pago": true,
-            "Saiu": false,
-            "Valor_Pago": 0.11
+            "Saiu": true,
+            "Valor_Pago": 0.4,
+            "Horario_de_Saida": "2025-01-17 10:06:35"
+        },
+        {
+            "id": 3,
+            "Horario_de_Entrada": "2025-01-17 10:06:53",
+            "Placa": "FAA-1234",
+            "Pago": false,
+            "Saiu": false
         }
     ]
 }
