@@ -1,14 +1,29 @@
-from flask import Flask, request, jsonify   # a biblioteca flask é utilizada para criação de API, a biblioteca request serve para criar o caminho até a função que será chamada 
-                                            # ao utilizar a api, já a jsonify é utilizada para entregar a mensagem em formato JSON
-from datetime import datetime # Apenas um biblioteca para pega a hora atual do computador
-import json # Biblioteca responsável pela comunicação com arquivos JSON
-import os 
 
-app = Flask(__name__)
+# Comando para utilizar:
+
+# Registrar entrada
+# curl -X POST -H "Content-Type: application/json" -d '{"plate": "FAA-1234"}' http://127.0.0.1:5000/parking
+
+# Pagar estacionamento
+# curl -X PUT http://127.0.0.1:5000/parking/1/pay
+
+# Registrar saída
+# curl -X PUT http://127.0.0.1:5000/parking/1/out
+
+# Consultar histórico
+# curl -X GET http://127.0.0.1:5000/parking/FAA-1234
+
+from flask import Flask, request, jsonify   # a biblioteca flask é utilizada para criação de API, a biblioteca request serve para trefegar as requisições  
+                                            # ao utilizar a api, já a jsonify é utilizada para entregar a mensagem em formato JSON
+from datetime import datetime # Biblioteca para pega a hora atual do computador
+import json # Biblioteca responsável pela comunicação com arquivos JSON
+import os # Biblioteca responsável pela verificação da existência de um arquivo JSON, caso não exista, será criado um arquivo JSON
+
+app = Flask(__name__) # Aqui está sendo criado uma aplicação flask 
 
 # Nome do arquivo JSON
 ARQUIVO_ESTACIONAMENTO = "estacionamento.json"
-TARIFA_POR_HORA = 15  # Valor da tarifa por hora
+TARIFA_POR_HORA = 15  # Valor do estacionamento por hora (fictício)
 
 # Inicializa o arquivo JSON
 def inicializar_json():
@@ -54,9 +69,10 @@ def registrar_entrada():                    # /parking/placa do carro no final d
         }
         dados["veiculos"].append(novo_carro) # Adiciona o novo carro em veículos do dicionário 
 
-        arquivo.seek(0)
-        json.dump(dados, arquivo, indent=4, ensure_ascii=False) #json.dumps converte o dicionário dados para a String no formato JSON, salvando os dados do novo carro
-        arquivo.truncate()
+        arquivo.seek(0) # Esse seek é responsável para mover o cursor para a posição 0 no arquivo 
+        json.dump(dados, arquivo, indent=4, ensure_ascii=False) #json.dumps converte o dicionário dados para a String no formato JSON, salvando os dados do novo carro, Indent quer dizer que o arquivo será salvo em 4 linhas 
+                                                                #Ensure_ascii Permite que caracteres não ASCII (como acentos ou caracteres especiais) sejam gravados corretamente no arquivo JSON.
+        arquivo.truncate() # Remove qualquer conteúdo restante no arquivo após a posição atual do cursor.
 
     return jsonify({"message": "Veiculo registrado", "id": novo_carro["id"]}), 201 #"201" indica que a solicitação do protocolo HTTP foi processada com sucesso
 
